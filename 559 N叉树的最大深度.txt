@@ -1,0 +1,49 @@
+题目描述：
+    给定一个 N 叉树，找到其最大深度。
+    最大深度是指从根节点到最远叶子节点的最长路径上的节点总数。
+    N 叉树输入按层序遍历序列化表示，每组子节点由空值分隔（请参见示例）。
+
+https://leetcode-cn.com/problems/maximum-depth-of-n-ary-tree
+
+
+//BFS——迭代
+class Solution {
+public:
+    int maxDepth(Node* root) {
+        queue<Node *> q;
+        vector<Node *> childrens;
+        int height=0;
+        if(!root)
+            return 0;
+        q.push(root);
+        while(!q.empty()){
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                auto node=q.front();
+                q.pop();
+                childrens=node->children;
+                for(Node* child :childrens){
+                    q.push(child);
+                }
+            }
+            height++;
+        }
+        return height;
+    }
+};
+
+//DFS——递归
+class Solution {
+public:
+    int maxDepth(Node* root) {
+        if(!root)
+            return 0;
+        vector<Node*> childrens;
+        childrens=root->children;
+        int maxheight=0;
+        for(Node* child:childrens){
+            maxheight=max(maxDepth(child),maxheight);
+        }
+        return maxheight+1;
+    }
+};

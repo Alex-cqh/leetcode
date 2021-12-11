@@ -1,0 +1,51 @@
+题目描述：
+    给定一棵二叉树的根节点 root ，请找出该二叉树中每一层的最大值。
+https://leetcode-cn.com/problems/find-largest-value-in-each-tree-row/
+
+//BFS,层序遍历+队列+出队比较
+class Solution {
+public:
+    vector<int> largestValues(TreeNode* root) {
+        vector<int> maxium;
+        queue<TreeNode *> q;
+        if(!root)
+            return maxium;
+        q.push(root);
+        while(!q.empty()){
+            int size=q.size();
+            int max=INT_MIN;
+            for(int i=0;i<size;i++){
+                TreeNode* node=q.front();
+                q.pop();
+                if(max<node->val)
+                    max=node->val;
+                if(node->left!=nullptr)
+                    q.push(node->left);
+                if(node->right!=nullptr)
+                    q.push(node->right);
+            }
+            maxium.push_back(max);
+        }
+        return maxium;
+    }
+};
+
+//DFS,递归
+class Solution{
+public:
+    vector<int> maxium;
+    void dfs(TreeNode* root,int level){
+        if(!root)
+            return;
+        if(level>maxium.size())
+            maxium.push_back(root->val);
+        else if(level<=maxium.size()&&maxium[level-1]<root->val)
+            maxium[level-1]=root->val;
+        dfs(root->left,level+1);
+        dfs(root->right,level+1);
+    }
+    vector<int> largestValues(TreeNode* root) {
+        dfs(root,1);
+        return maxium;
+    }
+};

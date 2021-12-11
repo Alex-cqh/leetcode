@@ -1,0 +1,54 @@
+题目描述：
+    给定一个头结点为 head 的非空单链表，返回链表的中间结点。
+    如果有两个中间结点，则返回第二个中间结点。
+https://leetcode-cn.com/problems/middle-of-the-linked-list/
+
+//初始解法——遍历获取链表长度，找到中间结点输出
+时间复杂度O(n) 空间复杂度O(1)
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        ListNode *ans=head;
+        if(head==nullptr)
+            return head;
+        int tag=1;
+        while(head->next!=nullptr){
+            tag++;
+            head=head->next;
+        }
+        tag=tag/2;
+        while(tag!=0){
+            ans=ans->next;
+            tag--;
+        }
+        return ans;
+    }
+};
+
+//快慢指针
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        ListNode* fast=head;
+        ListNode* slow=head;
+        while(fast->next!=nullptr){
+            if(fast->next->next==nullptr)
+                fast=fast->next;
+            else
+                fast=fast->next->next;
+            slow=slow->next;
+        }
+        return slow;
+    }
+};
+
+//利用vector容器,将单链表中数据存入vector容器中,利用随机存取特性找中间结点
+class Solution{
+public:
+    ListNode* middleNode(ListNode* head){
+        vector<ListNode *> nums={head};
+        while(nums.back()->next!=nullptr)
+            nums.push_back(nums.back()->next);
+        return nums[nums.size()/2];
+    }
+};

@@ -1,0 +1,47 @@
+题目描述:
+    如果二叉树每个节点都具有相同的值，那么该二叉树就是单值二叉树。
+    只有给定的树是单值二叉树时，才返回 true；否则返回 false。
+要求:
+    1.给定树的节点数范围是 [1, 100]。
+    2.每个节点的值都是整数，范围为 [0, 99] 。
+https://leetcode-cn.com/problems/univalued-binary-tree/
+
+//递归
+class Solution{
+public:
+    bool isUnivalTree(TreeNode* root) {
+        if(!root->left&&!root->right)
+            return true;
+        if(!root->left)
+            return (root->val==root->right->val)&&isUnivalTree(root->right);
+        if(!root->right)
+            return (root->val==root->left->val)&&isUnivalTree(root->left);
+        return isUnivalTree(root->left)&&isUnivalTree(root->right)
+                &&(root->val==root->right->val)&&(root->val==root->left->val);
+    }
+};
+
+//迭代,遍历每一个结点,然后比较
+//这里我是用层序遍历(前、中、后序也可)
+class Solution {
+public:
+    bool isUnivalTree(TreeNode* root) {
+        queue<TreeNode *> q;
+        int tag=root->val;
+        q.push(root);
+        while(!q.empty()){
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                auto node=q.front();
+                q.pop();
+                if(node->val!=tag)
+                    return false;
+                if(node->left!=nullptr)
+                    q.push(node->left);
+                if(node->right!=nullptr)
+                    q.push(node->right);
+            }
+        }
+        return true;
+    }
+};

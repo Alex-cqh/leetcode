@@ -1,0 +1,59 @@
+题目描述：
+    给定一个二叉树的根节点 root ，返回它的 中序 遍历
+https://leetcode-cn.com/problems/binary-tree-inorder-traversal/
+
+//递归算法
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> ans;
+        Inorder(root,ans);
+        return ans;
+    }
+    void Inorder(TreeNode* root,vector<int>& ans){
+        if(!root)
+            return;
+        Inorder(root->left,ans);
+        ans.push_back(root->val);
+        Inorder(root->right,ans);
+    }
+};
+
+//递归2
+class Solution{
+public:
+    vector<int> order;
+    vector<int> inorderTraversal(TreeNode* root){
+        if(!root)
+            return order;
+        inorderTraversal(root->left);
+        order.push_back(root->val);
+        inorderTraversal(root->right);
+        return order;
+    }
+};
+
+
+//迭代算法
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> ans;
+        stack<TreeNode *> st;
+        while(root!=nullptr||!st.empty()){
+            while(root!=nullptr){
+                st.push(root);
+                root=root->left;
+            }
+            root=st.top();
+            ans.push_back(root->val);
+            st.pop();
+            root=root->right;
+        }
+        return ans;
+    }
+};
+
+
+
+//Morris遍历

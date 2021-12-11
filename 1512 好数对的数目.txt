@@ -1,0 +1,79 @@
+题目描述：
+    给你一个整数数组 nums 。
+    如果一组数字 (i,j) 满足 nums[i] == nums[j] 且 i < j ，就可以认为这是一组 好数对 。
+    返回好数对的数目。
+https://leetcode-cn.com/problems/number-of-good-pairs/
+
+//初始解法 双层循环(暴力枚举)
+时间复杂度O(n^2)
+空间复杂度O(1)
+
+class Solution {
+public:
+    int numIdenticalPairs(vector<int>& nums) {
+        int i,j,count=0;
+        for(i=0;i<nums.size();i++){
+            for(j=i+1;j<nums.size();j++){
+                if(nums[i]==nums[j])
+                    count++;
+            }
+        }
+        return count;
+    }   
+};
+
+优化:组合计数——利用哈希表
+时间复杂度O(n)
+空间复杂度O(n)
+class Solution {
+public:
+    int numIdenticalPairs(vector<int>& nums) {
+        unordered_map<int,int> Hash;
+        for(int num:nums){
+            Hash[num]++;
+        }
+        int ans=0;
+        for(auto h:Hash){
+            ans+=h.second*(h.second-1)/2;
+        }
+        return ans;
+    }   
+};
+
+答案写法：
+备注：
+    const:修饰符
+    ? 想要拷贝元素：for(auto x:range)
+    ? 想要修改元素 : for(auto &&x:range)
+    ? 想要只读元素：for(const auto& x:range)
+
+    auto
+    auto即 for(auto x:range) 这样会拷贝一份range元素，而不会改变range中元素；
+    但是！（重点) 使用for(auto x:vector)时得到一个proxy class,操作时会改变vector本身元素。应用：for(bool x:vector)
+
+    auto&
+    ?当需要修改range中元素，用for(auto& x:range)
+    当vector返回临时对象，使用auto&会编译错误，临时对象不能绑在non-const l-value reference （左值引用）需使用auto&&,初始化右值时也可捕获
+
+    const auto&
+    ?当只想读取range中元素时，使用const auto&,如：for(const auto&x:range),它不会进行拷贝，也不会修改range
+
+    const auto
+    ?当需要拷贝元素，但不可修改拷贝出来的值时，使用 for(const auto x:range)，避免拷贝开销
+
+class Solution {
+public:
+    int numIdenticalPairs(vector<int>& nums) {
+        unordered_map <int, int> m;
+        for (int num: nums) {
+            ++m[num];
+        }
+
+        int ans = 0;
+        for (const auto &[k, v]: m) {
+            ans += v * (v - 1) / 2;
+        }
+
+        return ans;
+    }
+};

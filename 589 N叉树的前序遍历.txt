@@ -1,0 +1,61 @@
+题目描述：
+    给定一个 N 叉树，返回其节点值的 前序遍历 。
+    N 叉树 在输入中按层序遍历进行序列化表示，每组子节点由空值 null 分隔（请参见示例）。
+https://leetcode-cn.com/problems/n-ary-tree-preorder-traversal/
+
+//递归
+class Solution {
+public:
+    vector<int> order;
+    vector<int> preorder(Node* root) {
+        if(!root)
+            return order;
+        order.push_back(root->val);
+        auto childrens=root->children;
+        for(auto child:childrens){
+            preorder(child);
+        }
+        return order;
+    }
+};
+
+//递归2
+class Solution {
+public:
+    void preorderTraversal(Node* root,vector<int>& order){
+        if(!root)
+            return;
+        order.push_back(root->val);
+        vector<Node*> childrens=root->children;
+        for(auto child:childrens){
+            preorderTraversal(child,order);
+        }
+    }
+    vector<int> preorder(Node* root) {
+        vector<int> order;
+        preorderTraversal(root,order);
+        return order;
+    }
+};
+
+//迭代(有点难)
+class Solution {
+public:
+    vector<int> preorder(Node* root) {
+        vector<int> order;
+        stack<Node*> st;
+        if(!root)
+            return order;
+        st.push(root);
+        while(!st.empty()){
+            auto node=st.top();
+            st.pop();
+            order.push_back(node->val);
+            auto childrens=node->children;
+            for(int i=childrens.size()-1;i>=0;i--){
+                st.push(childrens[i]);
+            }
+        }
+        return order;
+    }
+};

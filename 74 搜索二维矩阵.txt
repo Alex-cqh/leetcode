@@ -1,0 +1,70 @@
+题目描述:
+    编写一个高效的算法来判断?m x n?矩阵中，是否存在一个目标值。该矩阵具有如下特性：
+    每行中的整数从左到右按升序排列。
+    每行的第一个整数大于前一行的最后一个整数。
+提示:
+    m == matrix.length
+    n == matrix[i].length
+    1 <= m, n <= 100
+    -104 <= matrix[i][j], target <= 104
+https://leetcode-cn.com/problems/search-a-2d-matrix/
+
+//二分查找
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        int r=matrix.size();
+        int c=matrix[0].size();
+        if(r==0)
+            return false;
+        int low=0;
+        int high=r*c-1;
+        int mid=(low+high)/2;
+        while(low<=high){
+            if(matrix[mid/c][mid%c]==target)
+                return true;
+            else if(matrix[mid/c][mid%c]<target)
+                low=mid+1;
+            else
+                high=mid-1;
+            mid=(low+high)/2;
+        }
+        return false;
+    }
+};
+
+//二次二分查找
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        int r=matrix.size();
+        int c=matrix[0].size();
+        if(r==0)
+            return false;
+        int low=0;
+        int high=r-1;
+        int mid=(low+high)/2;
+        while(low<=high){
+            if(matrix[mid][0]==target)
+                return true;
+            if(matrix[mid][0]<target)
+                low=mid+1;
+            else
+                high=mid-1;
+            mid=(low+high)/2;
+        }
+        int low2=0;
+        int high2=c-1;
+        int mid2=(low2+high2)/2;
+        while(low2<=high2){
+            if(matrix[mid][mid2]==target)
+                return true;
+            if(matrix[mid][mid2]<target)
+                low2=mid2+1;
+            else
+                high2=mid2-1;
+            mid2=(low2+high2)/2;
+        }
+        return false;
+    }
+};    

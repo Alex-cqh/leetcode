@@ -1,0 +1,58 @@
+题目描述：
+    给定一个非空二叉树, 返回一个由每层节点平均值组成的数组。
+https://leetcode-cn.com/problems/average-of-levels-in-binary-tree/
+
+//BFS——迭代
+class Solution {
+public:
+    vector<double> averageOfLevels(TreeNode* root) {
+        vector<double> average;
+        queue<TreeNode *> q;
+        q.push(root);
+        while(!q.empty()){
+            int size=q.size();
+            double div1=0;//这里不能定义为int
+            double div2=0;
+            for(int i=0;i<size;i++){
+                auto node=q.front();
+                q.pop();
+                div1+=node->val;
+                div2++;
+                if(node->left!=nullptr)
+                    q.push(node->left);
+                if(node->right!=nullptr)
+                    q.push(node->right);
+            }
+            average.push_back(div1/div2);
+        }
+        return average;
+    }
+};
+
+//DFS——递归
+class Solution {
+public:
+    void dfs(TreeNode* root,int level,vector<double>& sum,vector<int>& count){
+        if(level==sum.size()){
+            sum.push_back(root->val);
+            count.push_back(1);
+        }else{
+            sum[level]+=root->val;
+            count[level]++;
+        }
+        if(root->left!=nullptr)
+            dfs(root->left,level+1,sum,count);
+        if(root->right!=nullptr)
+            dfs(root->right,level+1,sum,count);
+    }
+    vector<double> averageOfLevels(TreeNode* root) {
+        vector<double> sum;
+        vector<int> count;
+        vector<double> average;
+        dfs(root,0,sum,count);
+        for(int i=0;i<sum.size();i++){
+            average.push_back(sum[i]/count[i]);
+        }
+        return average;
+    }
+};
